@@ -1,0 +1,17 @@
+<!-- templates/visiteur/edit.html.twig -->
+{% extends 'index.html.twig' %}
+
+{% block title %}Modifier un visiteur{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Modifier un visiteur</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.prenom) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.telephone) }}
+            <button type="submit" class="btn btn-primary">Modifier</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
