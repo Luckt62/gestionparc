@@ -14,8 +14,7 @@ security:
             security: false
 
         main:
-            # Choix de l'authentificateur par défaut
-            entry_point: form_login  # Utilise form_login comme point d'entrée par défaut
+            entry_point: form_login
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -24,26 +23,19 @@ security:
             custom_authenticator: App\Security\AppCustomAuthenticator
             logout:
                 path: app_logout
-                # Redirection après déconnexion
-                # target: app_any_route
-
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
 
-    # Contrôle d'accès
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/gestionnaire, roles: ROLE_GESTIONNAIRE }
-         - { path: ^/visiteur, roles: ROLE_VISITEUR }
+         - { path: ^/visiteur_medical, roles: ROLE_GESTIONNAIRE }
+         - { path: ^/visiteur_medical, roles: ROLE_VISITEUR }
 
-# Configuration de sécurité pour les tests
+
 when@test:
     security:
         password_hashers:
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4  # Plus bas pour les tests
-                time_cost: 3
-                memory_cost: 10
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'

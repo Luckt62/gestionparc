@@ -2,86 +2,104 @@
 
 namespace App\Entity;
 
-use App\Repository\VisiteurMedicalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-#[ORM\Entity(repositoryClass: VisiteurMedicalRepository::class)]
+#[ORM\Entity]
 class VisiteurMedical
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private int $id;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $nom;
 
-    #[ORM\Column(length: 30)]
-    private ?string $prenom = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $prenom;
 
-    #[ORM\Column(length: 50)]
-    private ?string $email = null;
+    #[ORM\Column(type: 'string', length: 100, unique: true)]
+    private string $email;
 
-    #[ORM\Column(length: 10)]
-    private ?string $telephone = null;
+    #[ORM\Column(type: 'string', length: 20)]
+    private string $telephone;
 
-    public function getId(): ?int
+    #[ORM\Column(type: 'string', length: 20)]
+    private string $role;
+
+    #[ORM\OneToMany(mappedBy: 'visiteur', targetEntity: Affectation::class)]
+    private Collection $attributions;
+
+    public function __construct()
+    {
+        $this->attributions = new ArrayCollection();
+    }
+
+    // GETTERS & SETTERS
+    public function getId(): int 
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getNom(): ?string
+    public function getNom(): string 
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(string $nom): self 
     {
         $this->nom = $nom;
-
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getPrenom(): string 
     {
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setPrenom(string $prenom): self 
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string 
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self 
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getTelephone(): ?string
+    public function getTelephone(): string 
     {
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setTelephone(string $telephone): self 
     {
         $this->telephone = $telephone;
-
         return $this;
+    }
+
+    public function getRole(): string 
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self 
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Vehicule;
@@ -16,28 +15,26 @@ class VehiculeRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicule::class);
     }
 
-    //    /**
-    //     * @return Vehicule[] Returns an array of Vehicule objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Récupère tous les véhicules triés par marque
+     */
+    public function findAllSortedByMarque(): array
+    {
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.marque', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Vehicule
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Récupère les véhicules dont le statut est "Disponible"
+     */
+    public function findAvailableVehicules(): array
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.statut = :statut')
+            ->setParameter('statut', 'Disponible')
+            ->getQuery()
+            ->getResult();
+    }
 }

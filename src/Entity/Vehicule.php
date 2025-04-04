@@ -1,102 +1,96 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 class Vehicule
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null; // 👈 Doit être nullable
 
-    #[ORM\Column(length: 50)]
-    private ?string $marque = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $marque;
 
-    #[ORM\Column(length: 30)]
-    private ?string $modele = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $modele;
 
-    #[ORM\Column(length: 15)]
-    private ?string $immatriculation = null;
+    #[ORM\Column(type: 'string', length: 15, unique: true)]
+    private string $immatriculation;
 
-    #[ORM\Column(length: 9)]
-    private ?string $kilometrage = null;
+    #[ORM\Column(type: 'integer')]
+    private int $kilometrage;
 
-    #[ORM\Column(length: 15)]
-    private ?string $statu = null;
+    #[ORM\Column(type: 'string', length: 20)]
+    private string $statut;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: Affectation::class, cascade: ['persist', 'remove'])]
+    private Collection $attributions;
+
+    #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: Entretien::class, cascade: ['persist', 'remove'])]
+    private Collection $entretiens;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->attributions = new ArrayCollection();
+        $this->entretiens = new ArrayCollection();
     }
 
-    public function setId(int $id): static
-    {
-        $this->id = $id;
+    // GETTERS & SETTERS
+    public function getId(): ?int { return $this->id; }
+    public function getMarque(): string { return $this->marque; }
+    public function setMarque(string $marque): self { $this->marque = $marque; return $this; }
+    public function getModele(): string { return $this->modele; }
+    public function setModele(string $modele): self { $this->modele = $modele; return $this; }
+    public function getImmatriculation(): string { return $this->immatriculation; }
+    public function setImmatriculation(string $immatriculation): self { $this->immatriculation = $immatriculation; return $this; }
+    public function getKilometrage(): int { return $this->kilometrage; }
+    public function setKilometrage(int $kilometrage): self { $this->kilometrage = $kilometrage; return $this; }
+    public function getStatut(): string { return $this->statut; }
+    public function setStatut(string $statut): self { $this->statut = $statut; return $this; }
 
+    // Relations avec Affectation
+    public function getAttributions(): Collection { return $this->attributions; }
+    public function addAttribution(Affectation $affectation): self
+    {
+        if (!$this->attributions->contains($affectation)) {
+            $this->attributions->add($affectation);
+            $affectation->setVehicule($this);
+        }
+        return $this;
+    }
+    public function removeAttribution(Affectation $affectation): self
+    {
+        if ($this->attributions->removeElement($affectation)) {
+            if ($affectation->getVehicule() === $this) {
+                $affectation->setVehicule(null);
+            }
+        }
         return $this;
     }
 
-    public function getMarque(): ?string
+    // Relations avec Entretien
+    public function getEntretiens(): Collection { return $this->entretiens; }
+    public function addEntretien(Entretien $entretien): self
     {
-        return $this->marque;
-    }
-
-    public function setMarque(string $marque): static
-    {
-        $this->marque = $marque;
-
+        if (!$this->entretiens->contains($entretien)) {
+            $this->entretiens->add($entretien);
+            $entretien->setVehicule($this);
+        }
         return $this;
     }
-
-    public function getModele(): ?string
+    public function removeEntretien(Entretien $entretien): self
     {
-        return $this->modele;
-    }
-
-    public function setModele(string $modele): static
-    {
-        $this->modele = $modele;
-
-        return $this;
-    }
-
-    public function getImmatriculation(): ?string
-    {
-        return $this->immatriculation;
-    }
-
-    public function setImmatriculation(string $immatriculation): static
-    {
-        $this->immatriculation = $immatriculation;
-
-        return $this;
-    }
-
-    public function getKilometrage(): ?string
-    {
-        return $this->kilometrage;
-    }
-
-    public function setKilometrage(string $kilometrage): static
-    {
-        $this->kilometrage = $kilometrage;
-
-        return $this;
-    }
-
-    public function getStatu(): ?string
-    {
-        return $this->statu;
-    }
-
-    public function setStatu(string $statu): static
-    {
-        $this->statu = $statu;
-
+        if ($this->entretiens->removeElement($entretien)) {
+            if ($entretien->getVehicule() === $this) {
+                $entretien->setVehicule(null);
+            }
+        }
         return $this;
     }
 }

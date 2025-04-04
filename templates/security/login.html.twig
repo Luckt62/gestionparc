@@ -5,41 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Se connecter</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Connexion</h2>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Connexion</h2>
 
-                        <!-- Formulaire de connexion -->
-                        <form action="{{ path('login') }}" method="post">
-                            <!-- Champ nom d'utilisateur -->
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nom d'utilisateur</label>
-                                <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required>
-                            </div>
+                    <!-- Affichage des erreurs -->
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
 
-                            <!-- Champ mot de passe -->
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Mot de passe</label>
-                                <input type="password" class="form-control" id="password" name="_password" required>
-                            </div>
+                    <!-- Formulaire de connexion -->
+                    <form action="{{ path('app_login') }}" method="post">
+                        <!-- Champ email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ last_username }}" required autofocus>
+                        </div>
 
-                            <!-- Affichage des erreurs -->
-                            {% if error %}
-                            <div class="alert alert-danger">
-                                {{ error.messageKey|trans(error.messageData, 'security') }}
-                            </div>
-                            {% endif %}
+                        <!-- Champ mot de passe -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
 
-                            <!-- Bouton de soumission -->
-                            <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-                        </form>
+                        <!-- Champ CSRF token -->
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <!-- Bouton de soumission -->
+                        <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                    </form>
+
+                    <!-- Liens supplémentaires -->
+                    <div class="text-center mt-3">
+                        <a href="{{ path('app_register') }}">Créer un compte</a>
                     </div>
                 </div>
             </div>
@@ -47,4 +53,7 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

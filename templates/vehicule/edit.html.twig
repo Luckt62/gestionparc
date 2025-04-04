@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Vehicule{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 pt-5">
+        <h1>Edit Vehicule</h1>
+
+        <!-- Formulaire de modification du véhicule -->
+        <div class="card p-4 mt-4">
+            {{ include('vehicule/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+
+        <!-- Retour à la liste des véhicules -->
+        <a href="{{ path('app_vehicule_index') }}" class="btn btn-secondary mt-3">Back to list</a>
+
+        <!-- Formulaire de suppression -->
+        {{ include('vehicule/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

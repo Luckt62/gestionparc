@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Affectation{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Détails de l'Affectation</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Informations de l'affectation</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ affectation.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de début</th>
+                            <td>{{ affectation.dateDebut ? affectation.dateDebut|date('Y-m-d') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de fin</th>
+                            <td>{{ affectation.dateFin ? affectation.dateFin|date('Y-m-d') : '' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste
+                    </a>
+
+                    <a href="{{ path('app_affectation_edit', {'id': affectation.id}) }}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Modifier
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{ include('affectation/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

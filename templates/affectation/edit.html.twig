@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'affectation{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'affectation</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.vehicule) }}
+        {{ form_row(form.visiteur) }}
+        {{ form_row(form.date_debut) }}
+        {{ form_row(form.date_fin) }}
+        <button class="btn btn-warning">Mettre à jour</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

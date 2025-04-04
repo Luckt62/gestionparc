@@ -2,88 +2,50 @@
 
 namespace App\Entity;
 
-use App\Repository\EntretienRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EntretienRepository::class)]
+#[ORM\Entity]
 class Entretien
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private int $id;
 
-    #[ORM\Column(length: 20)]
-    private ?string $type = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $type;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    #[ORM\Column(type: 'date')]
+    private \DateTime $date;
 
-    #[ORM\Column]
-    private ?float $cout = null;
+    #[ORM\Column(type: 'float')]
+    private float $cout;
 
-    #[ORM\ManyToOne]
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $piece_jointe;
+
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'entretiens')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Vehicule $vehicule_id = null;
+    private Vehicule $vehicule;
 
-    public function getId(): ?int
+    // GETTERS & SETTERS
+    public function getId(): int { return $this->id; }
+    public function getType(): string { return $this->type; }
+    public function setType(string $type): self { $this->type = $type; return $this; }
+    public function getDate(): \DateTime { return $this->date; }
+    public function setDate(\DateTime $date): self { $this->date = $date; return $this; }
+    public function getCout(): float { return $this->cout; }
+    public function setCout(float $cout): self { $this->cout = $cout; return $this; }
+    public function getPieceJointe(): ?string { return $this->piece_jointe; }
+    public function setPieceJointe(?string $piece_jointe): self { $this->piece_jointe = $piece_jointe; return $this; }
+    public function getVehicule(): Vehicule
     {
-        return $this->id;
+        return $this->vehicule;
     }
 
-    public function setId(int $id): static
+    public function setVehicule(Vehicule $vehicule): self
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): static
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getCout(): ?float
-    {
-        return $this->cout;
-    }
-
-    public function setCout(float $cout): static
-    {
-        $this->cout = $cout;
-
-        return $this;
-    }
-
-    public function getVehiculeId(): ?Vehicule
-    {
-        return $this->vehicule_id;
-    }
-
-    public function setVehiculeId(?Vehicule $vehicule_id): static
-    {
-        $this->vehicule_id = $vehicule_id;
-
+        $this->vehicule = $vehicule;
         return $this;
     }
 }

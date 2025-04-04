@@ -1,20 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AffectationController!{% endblock %}
+{% block title %}Liste des affectations{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Liste des affectations</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Véhicule</th>
+                <th>Visiteur</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for affectation in affectations %}
+            <tr>
+                <td>{{ affectation.id }}</td>
+                <td>{{ affectation.vehicule.id }}</td>
+                <td>{{ affectation.visiteur.nom }}</td>
+                <td>{{ affectation.getDateDebut()|date('d/m/Y') }}</td>
+                <td>{{ affectation.getDateFin()|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('app_affectation_show', {'id': affectation.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                    <a href="{{ path('app_affectation_edit', {'id': affectation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form action="{{ path('app_affectation_delete', {'id': affectation.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ affectation.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Aucune affectation trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/gestion_parc_automobile/src/Controller/AffectationController.php</code></li>
-        <li>Your template at <code>/var/www/html/gestion_parc_automobile/templates/affectation/index.html.twig</code></li>
-    </ul>
-</div>
+    <a href="{{ path('app_affectation_new') }}" class="btn btn-success">Créer une nouvelle affectation</a>
 {% endblock %}

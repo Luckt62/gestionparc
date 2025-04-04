@@ -2,104 +2,76 @@
 
 namespace App\Entity;
 
-use App\Repository\AffectationRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AffectationRepository::class)]
+#[ORM\Entity]
 class Affectation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private int $id;
 
-    #[ORM\ManyToOne]
+    #[ORM\Column(type: 'date')]
+    private \DateTime $date_debut;
+
+    #[ORM\Column(type: 'date')]
+    private \DateTime $date_fin;
+
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'attributions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?VisiteurMedical $visiteur_id = null;
+    private Vehicule $vehicule;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: VisiteurMedical::class, inversedBy: 'attributions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Vehicule $vehicule_id = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDebut = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateFin = null;
-
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $statut = null;
-
-    public function getId(): ?int
+    private VisiteurMedical $visiteur;
+    
+    public function getId(): int 
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getDateDebut(): \DateTime 
     {
-        $this->id = $id;
+        return $this->date_debut;
+    }
 
+    public function setDateDebut(\DateTime $date_debut): self 
+    {
+        $this->date_debut = $date_debut;
         return $this;
     }
 
-    public function getVisiteurId(): ?VisiteurMedical
+    public function getDateFin(): \DateTime 
     {
-        return $this->visiteur_id;
+        return $this->date_fin;
     }
 
-    public function setVisiteurId(?VisiteurMedical $visiteur_id): static
+    public function setDateFin(\DateTime $date_fin): self 
     {
-        $this->visiteur_id = $visiteur_id;
-
+        $this->date_fin = $date_fin;
         return $this;
     }
 
-    public function getVehiculeId(): ?Vehicule
+    public function getVehicule(): Vehicule 
     {
-        return $this->vehicule_id;
+        return $this->vehicule;
     }
 
-    public function setVehiculeId(?Vehicule $vehicule_id): static
+    public function setVehicule(Vehicule $vehicule): self 
     {
-        $this->vehicule_id = $vehicule_id;
-
+        $this->vehicule = $vehicule;
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    public function getVisiteur(): VisiteurMedical 
     {
-        return $this->dateDebut;
+        return $this->visiteur;
     }
 
-    public function setDateDebut(\DateTimeInterface $dateDebut): static
+    public function setVisiteur(VisiteurMedical $visiteur): self 
     {
-        $this->dateDebut = $dateDebut;
-
-        return $this;
-    }
-
-    public function getDateFin(): ?\DateTimeInterface
-    {
-        return $this->dateFin;
-    }
-
-    public function setDateFin(\DateTimeInterface $dateFin): static
-    {
-        $this->dateFin = $dateFin;
-
-        return $this;
-    }
-
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(?string $statut): static
-    {
-        $this->statut = $statut;
-
+        $this->visiteur = $visiteur;
         return $this;
     }
 }

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des entretiens{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center my-4">Liste des entretiens</h1>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Cout</th>
+                    <th>Pièce jointe</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entretien in entretiens %}
+                <tr>
+                    <td>{{ entretien.id }}</td>
+                    <td>{{ entretien.type }}</td>
+                    <td>{{ entretien.date ? entretien.date|date('Y-m-d') : '' }}</td>
+                    <td>{{ entretien.cout }} €</td>
+                    <td>{{ entretien.pieceJointe ? entretien.pieceJointe : 'Aucune' }}</td>
+                    <td>
+                        <a href="{{ path('app_entretien_show', {'id': entretien.id}) }}" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i> Voir
+                        </a>
+
+                        <a href="{{ path('app_entretien_edit', {'id': entretien.id}) }}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil"></i> Modifier
+                        </a>
+
+                        <!-- Formulaire de suppression -->
+                        <form action="{{ path('app_entretien_delete', {'id': entretien.id}) }}" method="post" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entretien.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet entretien ?');">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucun entretien trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_entretien_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Créer un nouvel entretien
+        </a>
+    </div>
+{% endblock %}
