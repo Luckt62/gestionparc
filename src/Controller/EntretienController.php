@@ -99,7 +99,7 @@ final class EntretienController extends AbstractController
     #[Route('/{id}', name: 'app_entretien_delete', methods: ['POST'])]
     public function delete(Request $request, Entretien $entretien, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier si le token CSRF est valide
+        
         if ($this->isCsrfTokenValid('delete' . $entretien->getId(), $request->request->get('_token'))) {
             $entityManager->remove($entretien);
             $entityManager->flush();
