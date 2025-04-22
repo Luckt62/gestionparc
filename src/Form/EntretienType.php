@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Entretien;
@@ -37,8 +36,7 @@ class EntretienType extends AbstractType
                     return $vehicule->getImmatriculation() . ' - ' . $vehicule->getMarque() . ' ' . $vehicule->getModele();
                 },
                 'attr' => ['class' => 'form-control'], 
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

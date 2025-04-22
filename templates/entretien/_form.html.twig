@@ -1,9 +1,11 @@
 {{ form_start(form) }}
     <div class="mb-3">
-        {{ form_widget(form) }}
+        {{ form_label(form) }}  <!-- Ajouter le label pour chaque champ -->
+        {{ form_widget(form) }}  <!-- Le champ du formulaire -->
+        {{ form_errors(form) }}  <!-- Afficher les erreurs si présentes -->
     </div>
 
     <div class="d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+        <button type="submit" class="btn btn-primary" aria-label="Enregistrer">{{ button_label|default('Enregistrer') }}</button>
     </div>
 {{ form_end(form) }}

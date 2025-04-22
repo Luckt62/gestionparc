@@ -3,43 +3,57 @@
 {% block title %}Liste des affectations{% endblock %}
 
 {% block body %}
-    <h1>Liste des affectations</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Liste des affectations</h1>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Véhicule</th>
-                <th>Visiteur</th>
-                <th>Date de début</th>
-                <th>Date de fin</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for affectation in affectations %}
-            <tr>
-                <td>{{ affectation.id }}</td>
-                <td>{{ affectation.vehicule.id }}</td>
-                <td>{{ affectation.visiteur.nom }}</td>
-                <td>{{ affectation.getDateDebut()|date('d/m/Y') }}</td>
-                <td>{{ affectation.getDateFin()|date('d/m/Y') }}</td>
-                <td>
-                    <a href="{{ path('app_affectation_show', {'id': affectation.id}) }}" class="btn btn-info btn-sm">Voir</a>
-                    <a href="{{ path('app_affectation_edit', {'id': affectation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form action="{{ path('app_affectation_delete', {'id': affectation.id}) }}" method="post" style="display:inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ affectation.id) }}">
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6" class="text-center">Aucune affectation trouvée.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Véhicule</th>
+                    <th>Visiteur</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for affectation in affectations %}
+                    <tr>
+                        <td>{{ affectation.id }}</td>
+                        <td>{{ affectation.vehicule.id }}</td>
+                        <td>{{ affectation.visiteur.nom }}</td>
+                        <td>{{ affectation.getDateDebut()|date('d/m/Y') }}</td>
+                        <td>{{ affectation.getDateFin()|date('d/m/Y') }}</td>
+                        <td>
+                            <a href="{{ path('app_affectation_show', {'id': affectation.id}) }}" class="btn btn-info btn-sm">
+                                <i class="bi bi-eye"></i> Voir
+                            </a>
+                            <a href="{{ path('app_affectation_edit', {'id': affectation.id}) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
+                            <form action="{{ path('app_affectation_delete', {'id': affectation.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette affectation ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ affectation.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            <strong>Aucune affectation trouvée.</strong>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_affectation_new') }}" class="btn btn-success">Créer une nouvelle affectation</a>
+        <div class="text-center mt-4">
+            <a href="{{ path('app_affectation_new') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Créer une nouvelle affectation
+            </a>
+        </div>
+    </div>
 {% endblock %}

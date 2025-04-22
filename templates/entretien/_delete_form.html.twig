@@ -1,6 +1,6 @@
 <form action="{{ path('app_entretien_delete', {'id': entretien.id}) }}" method="post" style="display:inline;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entretien.id) }}">
-    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet entretien ?');">
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet entretien ? Cette action est irréversible.');" aria-label="Supprimer l'entretien">
         <i class="bi bi-trash"></i> Supprimer
     </button>
 </form>

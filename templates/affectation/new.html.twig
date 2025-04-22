@@ -3,15 +3,41 @@
 {% block title %}Nouvelle affectation{% endblock %}
 
 {% block body %}
-    <h1>Créer une nouvelle affectation</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Créer une nouvelle affectation</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.vehicule) }}
-        {{ form_row(form.visiteur) }}
-        {{ form_row(form.date_debut) }}
-        {{ form_row(form.date_fin) }}
-        <button class="btn btn-success">Enregistrer</button>
-    {{ form_end(form) }}
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="mb-3">
+                {{ form_label(form.vehicule) }}
+                {{ form_widget(form.vehicule, {'attr': {'class': 'form-control'}}) }}
+                <div class="invalid-feedback">
+                    Veuillez sélectionner un véhicule.
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.visiteur) }}
+                {{ form_widget(form.visiteur, {'attr': {'class': 'form-control'}}) }}
+                <div class="invalid-feedback">
+                    Veuillez sélectionner un visiteur.
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.date_debut) }}
+                {{ form_widget(form.date_debut, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.date_fin) }}
+                {{ form_widget(form.date_fin, {'attr': {'class': 'form-control'}}) }}
+            </div>
 
-    <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Enregistrer
+                </button>
+                <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

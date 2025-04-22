@@ -1,11 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Entretien{% endblock %}
+{% block title %}Créer un nouvel entretien{% endblock %}
 
 {% block body %}
-    <h1>Create new Entretien</h1>
+    <div class="container mt-5">
+        <h1 class="text-center my-4">Créer un nouvel entretien</h1>
 
-    {{ include('entretien/_form.html.twig') }}
+        <!-- Formulaire d'entretien -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Entrez les informations de l'entretien</h5>
+            </div>
+            <div class="card-body">
+                {{ include('entretien/_form.html.twig') }}
+            </div>
+        </div>
 
-    <a href="{{ path('app_entretien_index') }}">back to list</a>
+        <!-- Bouton pour retourner à la liste -->
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ path('app_entretien_index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à la liste
+            </a>
+
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle"></i> Enregistrer
+            </button>
+        </div>
+    </div>
 {% endblock %}

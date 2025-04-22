@@ -1,36 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Entretien{% endblock %}
+{% block title %}Détails de l'Entretien{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center my-4">Détails de l'Entretien</h1>
 
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <th scope="row">Id</th>
-                    <td>{{ entretien.id }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Type</th>
-                    <td>{{ entretien.type }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Date</th>
-                    <td>{{ entretien.date ? entretien.date|date('Y-m-d') : 'Non précisé' }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Coût</th>
-                    <td>{{ entretien.cout }} €</td>
-                </tr>
-                <tr>
-                    <th scope="row">Pièce jointe</th>
-                    <td>{{ entretien.pieceJointe ? entretien.pieceJointe : 'Aucune pièce jointe' }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Carte pour afficher les détails -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Informations de l'entretien</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Id</th>
+                            <td>{{ entretien.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Type</th>
+                            <td>{{ entretien.type }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date</th>
+                            <td>{{ entretien.date ? entretien.date|date('Y-m-d') : 'Non précisé' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Coût</th>
+                            <td>{{ entretien.cout }} €</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Pièce jointe</th>
+                            <td>
+                                {% if entretien.pieceJointe %}
+                                    <a href="{{ asset('uploads/entretiens/' ~ entretien.pieceJointe) }}" target="_blank" class="btn btn-info btn-sm">
+                                        Voir la pièce jointe
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">Aucune pièce jointe</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <!-- Boutons d'action -->
         <div class="d-flex justify-content-between mt-4">
             <a href="{{ path('app_entretien_index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Retour à la liste

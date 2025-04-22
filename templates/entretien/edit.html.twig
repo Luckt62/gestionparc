@@ -6,8 +6,17 @@
     <div class="container mt-5">
         <h1 class="text-center my-4">Modifier l'Entretien</h1>
 
-        {{ include('entretien/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        <!-- Formulaire de modification -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Formulaire de modification</h5>
+            </div>
+            <div class="card-body">
+                {{ include('entretien/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+            </div>
+        </div>
 
+        <!-- Liens de navigation -->
         <div class="d-flex justify-content-between mt-4">
             <a href="{{ path('app_entretien_index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Retour à la liste

@@ -33,7 +33,7 @@
                             <td>{{ visiteur.prenom }}</td>
                             <td>{{ visiteur.email }}</td>
                             <td class="text-end">
-                                <a href="{{ path('visiteur_edit', {'id': visiteur.id}) }}" class="btn btn-outline-warning btn-sm me-1">
+                                <a href="{{ path('visiteur_edit', {'id': visiteur.id}) }}" class="btn btn-outline-warning btn-sm me-2">
                                     <i class="bi bi-pencil"></i> Modifier
                                 </a>
                                 <form method="post" action="{{ path('visiteur_delete', {'id': visiteur.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce visiteur ?');">

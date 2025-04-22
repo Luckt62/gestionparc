@@ -17,28 +17,33 @@
 
                     {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
 
+                        <!-- Champ Email -->
                         <div class="mb-3">
                             {{ form_label(registrationForm.email, 'Adresse Email', {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre email'}}) }}
                             {{ form_errors(registrationForm.email) }}
                         </div>
 
+                        <!-- Champ Mot de passe -->
                         <div class="mb-3">
                             {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Créez un mot de passe'}}) }}
                             {{ form_errors(registrationForm.plainPassword) }}
                         </div>
 
+                        <!-- Case à cocher des conditions d'utilisation -->
                         <div class="form-check mb-3">
                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
                             {{ form_label(registrationForm.agreeTerms, 'J’accepte les conditions d’utilisation', {'label_attr': {'class': 'form-check-label'}}) }}
                             {{ form_errors(registrationForm.agreeTerms) }}
                         </div>
 
+                        <!-- Bouton d'inscription -->
                         <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
 
                     {{ form_end(registrationForm) }}
 
+                    <!-- Lien de connexion -->
                     <p class="text-center mt-3">
                         Déjà un compte ? <a href="{{ path('app_login') }}" class="text-decoration-none">Connectez-vous ici</a>.
                     </p>

@@ -1,34 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Affectation{% endblock %}
+{% block title %}Détails de l'Affectation{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Détails de l'Affectation</h1>
 
         <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-primary text-white">
                 <h5>Informations de l'affectation</h5>
             </div>
             <div class="card-body">
-                <table class="table table-striped">
+                <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
-                            <th>Id</th>
+                            <th scope="row">Id</th>
                             <td>{{ affectation.id }}</td>
                         </tr>
                         <tr>
-                            <th>Date de début</th>
-                            <td>{{ affectation.dateDebut ? affectation.dateDebut|date('Y-m-d') : '' }}</td>
+                            <th scope="row">Date de début</th>
+                            <td>{{ affectation.dateDebut ? affectation.dateDebut|date('d/m/Y') : 'Non précisée' }}</td>
                         </tr>
                         <tr>
-                            <th>Date de fin</th>
-                            <td>{{ affectation.dateFin ? affectation.dateFin|date('Y-m-d') : '' }}</td>
+                            <th scope="row">Date de fin</th>
+                            <td>{{ affectation.dateFin ? affectation.dateFin|date('d/m/Y') : 'Non précisée' }}</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mt-3">
                     <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">
                         <i class="bi bi-arrow-left-circle"></i> Retour à la liste
                     </a>

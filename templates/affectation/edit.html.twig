@@ -3,15 +3,63 @@
 {% block title %}Modifier l'affectation{% endblock %}
 
 {% block body %}
-    <h1>Modifier l'affectation</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Modifier l'affectation</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.vehicule) }}
-        {{ form_row(form.visiteur) }}
-        {{ form_row(form.date_debut) }}
-        {{ form_row(form.date_fin) }}
-        <button class="btn btn-warning">Mettre à jour</button>
-    {{ form_end(form) }}
+        <form method="post" action="{{ path('app_affectation_edit', {'id': affectation.id}) }}" class="needs-validation" novalidate>
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.vehicule) }}
+                    {{ form_widget(form.vehicule, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.vehicule) %}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.vehicule) }}
+                        </div>
+                    {% endif %}
+                </div>
 
-    <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+                <div class="mb-3">
+                    {{ form_label(form.visiteur) }}
+                    {{ form_widget(form.visiteur, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.visiteur) %}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.visiteur) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.date_debut) }}
+                    {{ form_widget(form.date_debut, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.date_debut) %}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_debut) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.date_fin) }}
+                    {{ form_widget(form.date_fin, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.date_fin) %}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_fin) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-pencil-square"></i> Mettre à jour
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
 {% endblock %}

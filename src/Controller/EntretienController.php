@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/entretien')]
 final class EntretienController extends AbstractController
@@ -30,45 +31,41 @@ final class EntretienController extends AbstractController
         $entretien = new Entretien();
         $form = $this->createForm(EntretienType::class, $entretien);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Gestion du fichier pièce jointe
             $pieceJointe = $form->get('piece_jointe')->getData();
-    
+
             if ($pieceJointe) {
                 $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                // Crée un nom unique pour éviter les conflits
                 $newFilename = $originalFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
-    
-                // Déplace le fichier dans le répertoire des uploads
+
                 try {
+                    // Déplacement du fichier vers le répertoire des uploads
                     $pieceJointe->move(
-                        $this->getParameter('entretien_directory'), // Le répertoire des fichiers définis dans config/services.yaml
+                        $this->getParameter('entretien_directory'),  // Le répertoire défini dans config/services.yaml
                         $newFilename
                     );
-    
-                    // Sauvegarde le nom du fichier dans l'entité Entretien
+
+                    // Sauvegarder le nom du fichier dans la base de données
                     $entretien->setPieceJointe($newFilename);
                 } catch (FileException $e) {
-                    // Gérer l'exception si une erreur survient pendant l'upload
                     $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de la pièce jointe.');
                     return $this->redirectToRoute('app_entretien_new');
                 }
             }
-    
-            // Enregistre l'entité avec la pièce jointe
+
             $entityManager->persist($entretien);
             $entityManager->flush();
-    
+
             return $this->redirectToRoute('app_entretien_index', [], Response::HTTP_SEE_OTHER);
         }
-    
+
         return $this->render('entretien/new.html.twig', [
             'entretien' => $entretien,
             'form' => $form->createView(),
         ]);
     }
-    
 
     #[Route('/{id}', name: 'app_entretien_show', methods: ['GET'])]
     public function show(Entretien $entretien): Response
@@ -99,7 +96,6 @@ final class EntretienController extends AbstractController
     #[Route('/{id}', name: 'app_entretien_delete', methods: ['POST'])]
     public function delete(Request $request, Entretien $entretien, EntityManagerInterface $entityManager): Response
     {
-        
         if ($this->isCsrfTokenValid('delete' . $entretien->getId(), $request->request->get('_token'))) {
             $entityManager->remove($entretien);
             $entityManager->flush();
