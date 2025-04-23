@@ -44,8 +44,8 @@ class VisiteurMedicalType extends AbstractType
                 'label' => 'E-mail',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'exemple@domaine.com',
-                    'readonly' => $isEdit, // rend le champ non modifiable si édition
+                    'placeholder' => 'test@gmail.com',
+                    'readonly' => $isEdit, 
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'L\'email est obligatoire']),
@@ -56,7 +56,7 @@ class VisiteurMedicalType extends AbstractType
                 'label' => 'Téléphone',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '06 12 34 56 78',
+                    'placeholder' => 'Votre numéro de téléphone',
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'Le téléphone est obligatoire']),
@@ -81,7 +81,7 @@ class VisiteurMedicalType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => VisiteurMedical::class,
-            'is_edit' => false, // option personnalisée pour désactiver email en édition
+            'is_edit' => false, 
         ]);
     }
 }

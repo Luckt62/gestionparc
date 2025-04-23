@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container mt-5 pt-4">
-    <h1 class="text-center my-4">Liste des Véhicules</h1>
+    <h1 class="text-center my-4 text-primary">Liste des Véhicules</h1>
 
     <div class="d-flex justify-content-end mb-3">
         <a href="{{ path('app_vehicule_new') }}" class="btn btn-success">
@@ -12,87 +12,82 @@
         </a>
     </div>
 
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Marque</th>
-                <th>Modèle</th>
-                <th>Immatriculation</th>
-                <th>Km</th>
-                <th>Statut</th>
-                <th>Historique des affectations</th>
-                <th>Entretiens</th>  <!-- Ajout de la colonne pour afficher les entretiens -->
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for vehicule in vehicules %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered shadow-sm rounded">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ vehicule.id }}</td>
-                    <td>{{ vehicule.marque }}</td>
-                    <td>{{ vehicule.modele }}</td>
-                    <td>{{ vehicule.immatriculation }}</td>
-                    <td>{{ vehicule.kilometrage }}</td>
-                    <td>
-                        <span class="badge {% if vehicule.statut == 'Disponible' %} bg-success 
-                                         {% elseif vehicule.statut == 'En révision' %} bg-warning 
-                                         {% else %} bg-danger {% endif %}">
-                            {{ vehicule.statut }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if vehicule.attributions|length > 0 %}
-                            <!-- Afficher la dernière affectation -->
-                            {% set lastAffectation = vehicule.attributions|last %}
-                            <ul>
-                                <li>
-                                    {{ lastAffectation.dateDebut|date('d/m/Y') }} - {{ lastAffectation.dateFin|date('d/m/Y') }}
-                                </li>
-                            </ul>
-                            <a href="{{ path('app_affectation_index', {'vehiculeId': vehicule.id}) }}" class="btn btn-info btn-sm">
-                                <i class="bi bi-file-earmark-person"></i> Historique complet
-                            </a>
-                        {% else %}
-                            <span class="text-muted">Aucune affectation</span>
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        {% if vehicule.entretiens|length > 0 %}
-                            <!-- Affichage des entretiens -->
-                            <ul>
-                                {% for entretien in vehicule.entretiens %}
-                                    <li>{{ entretien.type }} ({{ entretien.date|date('d/m/Y') }}) - {{ entretien.cout }} €</li>
-                                {% endfor %}
-                            </ul>
-                            <a href="{{ path('app_entretien_index', {'vehiculeId': vehicule.id}) }}" class="btn btn-info btn-sm">
-                                <i class="bi bi-file-earmark-text"></i> Voir les entretiens
-                            </a>
-                        {% else %}
-                            <span class="text-muted">Aucun entretien</span>
-                            <!-- Bouton pour ajouter un entretien -->
-                            <a href="{{ path('app_entretien_new', {'id': vehicule.id}) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-plus-circle"></i> Ajouter un Entretien
-                            </a>
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        <a href="{{ path('app_vehicule_show', {'id': vehicule.id}) }}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-eye"></i> Voir
-                        </a>
-                        <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil"></i> Modifier
-                        </a>
-                    </td>
+                    <th>ID</th>
+                    <th>Marque</th>
+                    <th>Modèle</th>
+                    <th>Immatriculation</th>
+                    <th>Km</th>
+                    <th>Statut</th>
+                    <th>Historique des affectations</th>
+                    <th>Entretiens</th>
+                    <th>Actions</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="9" class="text-center text-muted">Aucun véhicule trouvé.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for vehicule in vehicules %}
+                    <tr>
+                        <td class="text-center">{{ vehicule.id }}</td>
+                        <td>{{ vehicule.marque }}</td>
+                        <td>{{ vehicule.modele }}</td>
+                        <td>{{ vehicule.immatriculation }}</td>
+                        <td class="text-center">{{ vehicule.kilometrage }}</td>
+                        <td class="text-center">
+                            <span class="badge {% if vehicule.statut == 'Disponible' %} bg-success {% elseif vehicule.statut == 'En révision' %} bg-warning {% else %} bg-danger {% endif %}">
+                                {{ vehicule.statut }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if vehicule.attributions|length > 0 %}
+                                {% set lastAffectation = vehicule.attributions|last %}
+                                <ul>
+                                    <li>
+                                        {{ lastAffectation.dateDebut|date('d/m/Y') }} - {{ lastAffectation.dateFin|date('d/m/Y') }}
+                                    </li>
+                                </ul>
+                                <a href="{{ path('app_affectation_index', {'vehiculeId': vehicule.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="bi bi-file-earmark-person"></i> Historique complet
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Aucune affectation</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if vehicule.entretiens|length > 0 %}
+                                <ul>
+                                    {% for entretien in vehicule.entretiens %}
+                                        <li>{{ entretien.type }} ({{ entretien.date|date('d/m/Y') }}) - {{ entretien.cout }} €</li>
+                                    {% endfor %}
+                                </ul>
+                                <a href="{{ path('app_entretien_index', {'vehiculeId': vehicule.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="bi bi-file-earmark-text"></i> Voir les entretiens
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Aucun entretien</span>
+                                <a href="{{ path('app_entretien_new', {'id': vehicule.id}) }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus-circle"></i> Ajouter un Entretien
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('app_vehicule_show', {'id': vehicule.id}) }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye"></i> Voir
+                            </a>
+                            <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">Aucun véhicule trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
