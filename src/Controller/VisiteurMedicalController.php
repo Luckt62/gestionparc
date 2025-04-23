@@ -27,30 +27,35 @@ class VisiteurMedicalController extends AbstractController
     }
 
     #[Route('/visiteur_medical/new', name: 'visiteur_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
-
-        $visiteur = new VisiteurMedical();
-        $form = $this->createForm(VisiteurMedicalType::class, $visiteur);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($visiteur);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('visiteur_index');
-        }
-
-        return $this->render('visiteur_medical/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    if (!$this->isGranted('ROLE_GESTIONNAIRE')) {
+        return $this->redirectToRoute('home');
     }
+
+    $visiteur = new VisiteurMedical();
+    $form = $this->createForm(VisiteurMedicalType::class, $visiteur);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($visiteur);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('visiteur_index');
+    }
+
+    return $this->render('visiteur_medical/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 
     #[Route('/visiteur_medical/{id}/edit', name: 'visiteur_edit', methods: ['GET', 'POST'])]
     public function edit(VisiteurMedical $visiteur, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+        if (!$this->isGranted('ROLE_GESTIONNAIRE')) {
+            return $this->redirectToRoute('home');
+        }
 
         $form = $this->createForm(VisiteurMedicalType::class, $visiteur);
         $form->handleRequest($request);
@@ -69,7 +74,9 @@ class VisiteurMedicalController extends AbstractController
     #[Route('/visiteur_medical/{id}/delete', name: 'visiteur_delete', methods: ['POST'])]
     public function delete(VisiteurMedical $visiteur, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_GESTIONNAIRE');
+        if (!$this->isGranted('ROLE_GESTIONNAIRE')) {
+            return $this->redirectToRoute('home');
+        }
 
         $entityManager->remove($visiteur);
         $entityManager->flush();

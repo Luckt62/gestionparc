@@ -33,21 +33,17 @@ final class EntretienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion du fichier pièce jointe
             $pieceJointe = $form->get('piece_jointe')->getData();
 
             if ($pieceJointe) {
                 $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $pieceJointe->guessExtension();
 
                 try {
-                    // Déplacement du fichier vers le répertoire des uploads
                     $pieceJointe->move(
-                        $this->getParameter('entretien_directory'),  // Le répertoire défini dans config/services.yaml
+                        $this->getParameter('entretien_directory'),
                         $newFilename
                     );
-
-                    // Sauvegarder le nom du fichier dans la base de données
                     $entretien->setPieceJointe($newFilename);
                 } catch (FileException $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de la pièce jointe.');
@@ -58,7 +54,8 @@ final class EntretienController extends AbstractController
             $entityManager->persist($entretien);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_entretien_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\'entretien a bien été créé.');
+            return $this->redirectToRoute('app_entretien_index');
         }
 
         return $this->render('entretien/new.html.twig', [
@@ -82,14 +79,39 @@ final class EntretienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pieceJointe = $form->get('piece_jointe')->getData();
+
+            if ($pieceJointe) {
+                
+                $oldFilename = $entretien->getPieceJointe();
+                if ($oldFilename) {
+                    $oldFilePath = $this->getParameter('entretien_directory') . '/' . $oldFilename;
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $pieceJointe->guessExtension();
+                try {
+                    $pieceJointe->move(
+                        $this->getParameter('entretien_directory'),
+                        $newFilename
+                    );
+                    $entretien->setPieceJointe($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de la pièce jointe.');
+                }
+            }
+
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_entretien_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\'entretien a bien été mis à jour.');
+            return $this->redirectToRoute('app_entretien_index');
         }
 
         return $this->render('entretien/edit.html.twig', [
             'entretien' => $entretien,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -97,10 +119,20 @@ final class EntretienController extends AbstractController
     public function delete(Request $request, Entretien $entretien, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $entretien->getId(), $request->request->get('_token'))) {
+            $file = $entretien->getPieceJointe();
+            if ($file) {
+                $filePath = $this->getParameter('entretien_directory') . '/' . $file;
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+
             $entityManager->remove($entretien);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Entretien supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('app_entretien_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_entretien_index');
     }
 }

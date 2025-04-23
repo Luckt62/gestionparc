@@ -4,11 +4,11 @@
 
 {% block body %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">👨‍⚕️ Liste des Visiteurs Médicaux</h1>
+    <h1 class="text-center mb-4">Liste des Visiteurs Médicaux</h1>
 
     <form method="get" action="{{ path('visiteur_index') }}" class="mb-4">
         <div class="input-group">
-            <input type="text" name="search" value="{{ searchTerm }}" class="form-control" placeholder="🔍 Rechercher un visiteur..." aria-label="Recherche">
+            <input type="text" name="search" value="{{ searchTerm }}" class="form-control" placeholder="Rechercher un visiteur..." aria-label="Recherche">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-search"></i> Rechercher
             </button>
